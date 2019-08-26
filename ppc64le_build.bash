@@ -20,6 +20,8 @@ mkdir -p build/download_cache
 
 cd build/src
 
+sed -i '/-static-libstdc++/d' tools/gn/build/gen.py
+
 mkdir -p out/Default
 ./tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles -j$(nproc) -o out/Default/gn
 PATH="${PWD}/out/Default:${PATH}"
