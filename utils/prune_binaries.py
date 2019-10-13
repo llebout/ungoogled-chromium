@@ -9,7 +9,7 @@
 import argparse
 from pathlib import Path
 
-from _common import ENCODING, get_logger
+from _common import ENCODING, get_logger, add_common_params
 
 
 def prune_dir(unpack_root, prune_files):
@@ -38,7 +38,9 @@ def _callback(args):
     prune_files = tuple(filter(len, args.pruning_list.read_text(encoding=ENCODING).splitlines()))
     unremovable_files = prune_dir(args.directory, prune_files)
     if unremovable_files:
-        get_logger().error('Files could not be pruned: %s', unremovable_files)
+        get_logger().error('%d files could not be pruned.', len(unremovable_files))
+        get_logger().debug('Files could not be pruned:\n%s',
+                           '\n'.join(f for f in unremovable_files))
         exit(1)
 
 
@@ -47,6 +49,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('directory', type=Path, help='The directory to apply binary pruning.')
     parser.add_argument('pruning_list', type=Path, help='Path to pruning.list')
+    add_common_params(parser)
     parser.set_defaults(callback=_callback)
 
     args = parser.parse_args()
