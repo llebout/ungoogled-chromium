@@ -1,0 +1,26 @@
+--- a/chrome/browser/ui/webui/settings/change_password_handler.cc	2019-10-10 20:53:34.000000000 +0200
++++ b/chrome/browser/ui/webui/settings/change_password_handler.cc	2019-10-14 01:09:57.888816406 +0200
+@@ -55,18 +55,18 @@
+ }
+ 
+ void ChangePasswordHandler::HandleChangePassword(const base::ListValue* args) {
+-  service_->OnUserAction(web_ui()->GetWebContents(),
++  /* service_->OnUserAction(web_ui()->GetWebContents(),
+                          PasswordType::PRIMARY_ACCOUNT_PASSWORD,
+                          safe_browsing::WarningUIType::CHROME_SETTINGS,
+-                         safe_browsing::WarningAction::CHANGE_PASSWORD);
++                         safe_browsing::WarningAction::CHANGE_PASSWORD); */
+ }
+ 
+ void ChangePasswordHandler::UpdateChangePasswordCardVisibility() {
+-  FireWebUIListener(
++  /* FireWebUIListener(
+       "change-password-visibility",
+       base::Value(service_->IsWarningEnabled() &&
+                   safe_browsing::ChromePasswordProtectionService::
+-                      ShouldShowChangePasswordSettingUI(profile_)));
++                      ShouldShowChangePasswordSettingUI(profile_))); */
+ }
+ 
+ }  // namespace settings
+
