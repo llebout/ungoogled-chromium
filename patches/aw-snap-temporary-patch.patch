@@ -10,8 +10,8 @@ Subject: [PATCH] HACK: Disable format detection until buffer overflow is
 
 diff --git a/libavformat/utils.c b/libavformat/utils.c
 index 66e4a66dc4..207f7e2135 100644
---- a/libavformat/utils.c
-+++ b/libavformat/utils.c
+--- a/third_party/ffmpeg/libavformat/utils.c
++++ b/third_party/ffmpeg/libavformat/utils.c
 @@ -627,9 +627,11 @@ FF_ENABLE_DEPRECATION_WARNINGS
          ff_id3v2_read_dict(s->pb, &s->internal->id3v2_meta, ID3v2_DEFAULT_MAGIC, &id3v2_extra_meta);
  
