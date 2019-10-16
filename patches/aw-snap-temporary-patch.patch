@@ -1,0 +1,29 @@
+From c51e6a126bcd220c2243cba97daf1c226055c82b Mon Sep 17 00:00:00 2001
+From: Shawn Anastasio <shawn@anastas.io>
+Date: Tue, 15 Oct 2019 19:22:15 -0500
+Subject: [PATCH] HACK: Disable format detection until buffer overflow is
+ found/fixed
+
+---
+ libavformat/utils.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libavformat/utils.c b/libavformat/utils.c
+index 66e4a66dc4..207f7e2135 100644
+--- a/libavformat/utils.c
++++ b/libavformat/utils.c
+@@ -627,9 +627,11 @@ FF_ENABLE_DEPRECATION_WARNINGS
+         ff_id3v2_read_dict(s->pb, &s->internal->id3v2_meta, ID3v2_DEFAULT_MAGIC, &id3v2_extra_meta);
+ 
+ 
++    /*
+     if (!(s->flags&AVFMT_FLAG_PRIV_OPT) && s->iformat->read_header)
+         if ((ret = s->iformat->read_header(s)) < 0)
+             goto fail;
++    */
+ 
+     if (!s->metadata) {
+         s->metadata = s->internal->id3v2_meta;
+-- 
+2.23.0
+

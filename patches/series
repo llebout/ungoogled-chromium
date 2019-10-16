@@ -1,6 +1,7 @@
 chromium-77-std-string.patch
 0001-third_party-pffft-Include-altivec.h-on-ppc64-with-SI.patch
 debug-linking-errors.patch
+aw-snap-temporary-patch.patch
 
 chromium_power/breakpad/0001-Implement-ppc64-support-on-linux.patch
 chromium_power/crashpad/0001-Implement-support-for-PPC64-on-Linux.patch
