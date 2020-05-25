@@ -1,9 +1,9 @@
---- chromium-81.0.4044.92.orig/chrome/installer/linux/BUILD.gn
-+++ chromium-81.0.4044.92/chrome/installer/linux/BUILD.gn
-@@ -66,46 +66,6 @@ packaging_files = packaging_files_binari
+--- chromium-83.0.4103.56.orig/chrome/installer/linux/BUILD.gn
++++ chromium-83.0.4103.56/chrome/installer/linux/BUILD.gn
+@@ -69,46 +69,6 @@ packaging_files = packaging_files_binari
                      "$root_out_dir/MEIPreload/preloaded_data.pb",
                    ]
- 
+
 -action_foreach("calculate_deb_dependencies") {
 -  deps = [ ":installer_deps" ]
 -  script = "debian/calculate_package_deps.py"
@@ -47,7 +47,7 @@
  action_foreach("calculate_rpm_dependencies") {
    deps = [ ":installer_deps" ]
    script = "rpm/calculate_package_deps.py"
-@@ -143,7 +103,6 @@ action("strip_chrome_binary") {
+@@ -146,7 +106,6 @@ action("strip_chrome_binary") {
    deps = [ "//chrome" ]
    script = "//build/gn_run_binary.py"
    sources = [
@@ -55,7 +55,7 @@
      prog_name,
    ]
    outputs = [
-@@ -151,7 +110,7 @@ action("strip_chrome_binary") {
+@@ -154,7 +113,7 @@ action("strip_chrome_binary") {
      stripped_file,
    ]
    args = [
@@ -64,15 +64,15 @@
                  root_build_dir),
      "-o",
      rebase_path(stripped_file, root_build_dir),
-@@ -235,26 +194,9 @@ copy("common_packaging_files") {
+@@ -238,26 +197,9 @@ copy("common_packaging_files") {
      ]
    }
- 
+
 -  sources += [ "//buildtools/third_party/eu-strip/bin/eu-strip" ]
 -
    outputs = [ "$root_out_dir/installer/common/{{source_file_part}}" ]
  }
- 
+
 -copy("deb_packaging_files") {
 -  visibility = [ ":*" ]
 -  sources = [
@@ -91,18 +91,18 @@
  copy("theme_files") {
    visibility = [ ":*" ]
    sources = [
-@@ -322,7 +264,6 @@ group("installer_deps") {
- 
+@@ -325,7 +267,6 @@ group("installer_deps") {
+
    public_deps = [
      ":common_packaging_files",
 -    ":deb_packaging_files",
      ":save_build_info",
      ":strip_chrome_binary",
      ":theme_files",
-@@ -365,61 +306,6 @@ template("linux_package") {
-     build_script_arch = current_cpu
+@@ -367,54 +308,6 @@ template("linux_package") {
+     package = "chromium-browser"
    }
- 
+
 -  deb_target_name = "${target_name}_deb"
 -  action(deb_target_name) {
 -    visibility = [ ":*" ]
@@ -113,7 +113,7 @@
 -    } else if (current_cpu == "x64") {
 -      deb_arch = "amd64"
 -    } else if (current_cpu == "arm") {
--      deb_arch = "arm"
+-      deb_arch = "armhf"
 -    } else if (current_cpu == "arm64") {
 -      deb_arch = "arm64"
 -    } else if (current_cpu == "mipsel") {
@@ -125,19 +125,12 @@
 -    }
 -
 -    inputs = packaging_files
--    if (is_chrome_branded) {
--      package = "google-chrome"
--    } else {
--      package = "chromium-browser"
--    }
 -    outputs = [ "$root_out_dir/${package}-${channel}_${chrome_version_full}-1_${deb_arch}.deb" ]
 -
 -    args = [
 -      rebase_path("$root_out_dir/installer/debian/build.sh", root_build_dir),
 -      "-a",
--      build_script_arch,
--      "-b",
--      rebase_path(root_out_dir, root_build_dir),
+-      deb_arch,
 -      "-c",
 -      invoker.channel,
 -      "-d",
@@ -161,7 +154,7 @@
    if (!is_chromeos) {
      rpm_target_name = "${target_name}_rpm"
      action(rpm_target_name) {
-@@ -438,6 +324,8 @@ template("linux_package") {
+@@ -433,6 +326,8 @@ template("linux_package") {
          rpm_arch = "mipsel"
        } else if (current_cpu == "mips64el") {
          rpm_arch = "mips64el"
@@ -170,58 +163,58 @@
        } else {
          assert(false, "Linux installer not configured for this architecture.")
        }
-@@ -476,7 +364,7 @@ template("linux_package") {
+@@ -503,7 +398,7 @@ template("linux_package") {
    }
- 
+
    group(target_name) {
 -    deps = [ ":$deb_target_name" ]
 +    deps = [  ]
      if (!is_chromeos) {
        deps += [ ":$rpm_target_name" ]
-     }
---- chromium-81.0.4044.92.orig/chrome/installer/linux/common/installer.include
-+++ chromium-81.0.4044.92/chrome/installer/linux/common/installer.include
-@@ -144,7 +144,7 @@ stage_install_common() {
-   buildfile="${BUILDDIR}/crashpad_handler"
+       if (enable_snap_package) {
+--- chromium-83.0.4103.56.orig/chrome/installer/linux/common/installer.include
++++ chromium-83.0.4103.56/chrome/installer/linux/common/installer.include
+@@ -145,7 +145,7 @@ stage_install_common() {
+   buildfile="${OUTPUTDIR}/crashpad_handler"
    strippedfile="${buildfile}.stripped"
    debugfile="${buildfile}.debug"
--  "${BUILDDIR}/installer/common/eu-strip" -o "${strippedfile}" -f "${debugfile}" "${buildfile}"
+-  "${OUTPUTDIR}/installer/common/eu-strip" -o "${strippedfile}" -f "${debugfile}" "${buildfile}"
 +  "/usr/bin/eu-strip" -o "${strippedfile}" -f "${debugfile}" "${buildfile}"
    install -m 755 "${strippedfile}" "${STAGEDIR}/${INSTALLDIR}/crashpad_handler"
- 
+
    # resources
-@@ -183,7 +183,7 @@ stage_install_common() {
-   buildfile="${BUILDDIR}/${PROGNAME}_sandbox"
+@@ -184,7 +184,7 @@ stage_install_common() {
+   buildfile="${OUTPUTDIR}/${PROGNAME}_sandbox"
    strippedfile="${buildfile}.stripped"
    debugfile="${buildfile}.debug"
--  "${BUILDDIR}/installer/common/eu-strip" -o "${strippedfile}" -f "${debugfile}" "${buildfile}"
+-  "${OUTPUTDIR}/installer/common/eu-strip" -o "${strippedfile}" -f "${debugfile}" "${buildfile}"
 +  "/usr/bin/eu-strip" -o "${strippedfile}" -f "${debugfile}" "${buildfile}"
    install -m 4755 "${strippedfile}" "${STAGEDIR}/${INSTALLDIR}/chrome-sandbox"
- 
+
    # l10n paks
-@@ -215,7 +215,7 @@ stage_install_common() {
-       buildfile="${BUILDDIR}/${file}"
+@@ -216,7 +216,7 @@ stage_install_common() {
+       buildfile="${OUTPUTDIR}/${file}"
        strippedfile="${buildfile}.stripped"
        debugfile="${buildfile}.debug"
--      "${BUILDDIR}/installer/common/eu-strip" -o "${strippedfile}" -f "${debugfile}" "${buildfile}"
+-      "${OUTPUTDIR}/installer/common/eu-strip" -o "${strippedfile}" -f "${debugfile}" "${buildfile}"
 +      "/usr/bin/eu-strip" -o "${strippedfile}" -f "${debugfile}" "${buildfile}"
        install -m ${SHLIB_PERMS} "${strippedfile}" "${STAGEDIR}/${INSTALLDIR}/${file}"
      done
    fi
-@@ -227,7 +227,7 @@ stage_install_common() {
-       buildfile="${BUILDDIR}/swiftshader/${file}"
+@@ -228,7 +228,7 @@ stage_install_common() {
+       buildfile="${OUTPUTDIR}/swiftshader/${file}"
        strippedfile="${buildfile}.stripped"
        debugfile="${buildfile}.debug"
--      "${BUILDDIR}/installer/common/eu-strip" -o "${strippedfile}" -f "${debugfile}" "${buildfile}"
+-      "${OUTPUTDIR}/installer/common/eu-strip" -o "${strippedfile}" -f "${debugfile}" "${buildfile}"
 +      "/usr/bin/eu-strip" -o "${strippedfile}" -f "${debugfile}" "${buildfile}"
        install -m ${SHLIB_PERMS} "${strippedfile}" "${STAGEDIR}/${INSTALLDIR}/swiftshader/${file}"
      done
    fi
---- chromium-81.0.4044.92.orig/chrome/installer/linux/common/rpm.include
-+++ chromium-81.0.4044.92/chrome/installer/linux/common/rpm.include
+--- chromium-83.0.4103.56.orig/chrome/installer/linux/common/rpm.include
++++ chromium-83.0.4103.56/chrome/installer/linux/common/rpm.include
 @@ -1,478 +1,5 @@
  @@include@@variables.include
- 
+
 -# Install the repository signing key (see also:
 -# https://www.google.com/linuxrepositories/)
 -install_rpm_key() {
@@ -696,19 +689,19 @@
 -#}
 -
  DEFAULT_ARCH="@@ARCHITECTURE@@"
- 
+
  get_lib_dir() {
-@@ -480,6 +7,8 @@ get_lib_dir() {
-     LIBDIR=lib
-   elif [ "$DEFAULT_ARCH" = "x86_64" ]; then
+@@ -482,6 +9,8 @@ get_lib_dir() {
+   elif [ "$DEFAULT_ARCH" = "x86_64" ] || [ "$DEFAULT_ARCH" = "aarch64" ] || \
+         [ "$DEFAULT_ARCH" = "mips64el" ]; then
      LIBDIR=lib64
 +  elif [ "$DEFAULT_ARCH" = "ppc64le" ]; then
 +    LIBDIR=lib64
    else
      echo Unknown CPU Architecture: "$DEFAULT_ARCH"
      exit 1
---- chromium-81.0.4044.92.orig/chrome/installer/linux/common/variables.include
-+++ chromium-81.0.4044.92/chrome/installer/linux/common/variables.include
+--- chromium-83.0.4103.56.orig/chrome/installer/linux/common/variables.include
++++ chromium-83.0.4103.56/chrome/installer/linux/common/variables.include
 @@ -1,6 +1,2 @@
  # System-wide package configuration.
  DEFAULTS_FILE="/etc/default/@@PACKAGE@@"
@@ -716,42 +709,31 @@
 -# sources.list setting for @@PACKAGE@@ updates.
 -REPOCONFIG="@@REPOCONFIG@@"
 -REPOCONFIGREGEX="@@REPOCONFIGREGEX@@"
---- chromium-81.0.4044.92.orig/chrome/installer/linux/rpm/build.sh
-+++ chromium-81.0.4044.92/chrome/installer/linux/rpm/build.sh
+--- chromium-83.0.4103.56.orig/chrome/installer/linux/rpm/build.sh
++++ chromium-83.0.4103.56/chrome/installer/linux/rpm/build.sh
 @@ -27,7 +27,6 @@ gen_spec() {
  # Setup the installation directory hierachy in the package staging area.
  prep_staging_rpm() {
    prep_staging_common
 -  install -m 755 -d "${STAGEDIR}/etc/cron.daily"
  }
- 
+
  # Put the package contents in the staging area.
 @@ -49,9 +48,6 @@ stage_install_rpm() {
    SHLIB_PERMS=755
    stage_install_common
    log_cmd echo "Staging RPM install files in '${STAGEDIR}'..."
--  process_template "${BUILDDIR}/installer/common/rpmrepo.cron" \
+-  process_template "${OUTPUTDIR}/installer/common/rpmrepo.cron" \
 -    "${STAGEDIR}/etc/cron.daily/${PACKAGE}"
 -  chmod 755 "${STAGEDIR}/etc/cron.daily/${PACKAGE}"
  }
- 
+
  verify_package() {
-@@ -271,6 +267,10 @@ case "$TARGETARCH" in
-     export ARCHITECTURE="mips64el"
-     stage_install_rpm
-     ;;
-+  ppc64 )
-+    export ARCHITECTURE="ppc64le"
-+    stage_install_rpm
-+    ;;
-   * )
-     echo
-     echo "ERROR: Don't know how to build RPMs for '$TARGETARCH'."
---- chromium-81.0.4044.92.orig/chrome/installer/linux/rpm/chrome.spec.template
-+++ chromium-81.0.4044.92/chrome/installer/linux/rpm/chrome.spec.template
+--- chromium-83.0.4103.56.orig/chrome/installer/linux/rpm/chrome.spec.template
++++ chromium-83.0.4103.56/chrome/installer/linux/rpm/chrome.spec.template
 @@ -58,11 +58,9 @@ if [ -z "@@INSTALLDIR@@" -o ! -d "@@STAG
  fi
- 
+
  install -m 755 -d \
 -  "$RPM_BUILD_ROOT/etc" \
    "$RPM_BUILD_ROOT/opt" \
@@ -760,9 +742,9 @@
 -cp -a "@@STAGEDIR@@/etc/" "$RPM_BUILD_ROOT/"
  cp -a "@@STAGEDIR@@/opt/" "$RPM_BUILD_ROOT/"
  cp -a "@@STAGEDIR@@/usr/" "$RPM_BUILD_ROOT/"
- 
+
 @@ -85,7 +83,6 @@ rm -rf "$RPM_BUILD_ROOT"
- 
+
  # Be explicit about the files we scatter throughout the system we don't
  # accidentally "own" stuff that's not ours (crbug.com/123990).
 -/etc/cron.daily/@@PACKAGE@@
@@ -770,9 +752,9 @@
  /usr/bin/@@USR_BIN_SYMLINK_NAME@@
  /usr/share/appdata/@@PACKAGE@@.appdata.xml
 @@ -122,44 +119,6 @@ add_nss_symlinks
- 
+
  remove_udev_symlinks
- 
+
 -DEFAULTS_FILE="/etc/default/@@PACKAGE@@"
 -if [ ! -e "$DEFAULTS_FILE" ]; then
 -  echo 'repo_add_once="true"' > "$DEFAULTS_FILE"
