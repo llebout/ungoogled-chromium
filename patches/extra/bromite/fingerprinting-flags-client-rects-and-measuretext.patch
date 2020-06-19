@@ -27,10 +27,10 @@
  #include "ui/accessibility/accessibility_features.h"
  #include "ui/accessibility/accessibility_switches.h"
  #include "ui/base/ui_base_features.h"
-@@ -1801,6 +1802,14 @@ const FeatureEntry kFeatureEntries[] = {
-      "Force punycode hostnames",
-      "Force punycode in hostnames instead of Unicode when displaying Internationalized Domain Names (IDNs).",
-      kOsAll, SINGLE_VALUE_TYPE("force-punycode-hostnames")},
+@@ -1811,6 +1812,14 @@ const FeatureEntry kFeatureEntries[] = {
+      "Set internal PDF plugin name",
+      "Sets the internal PDF viewer plugin name. Useful for sites that probe JS API navigator.plugins",
+      kOsDesktop, MULTI_VALUE_TYPE(kPDFPluginNameChoices)},
 +    {"fingerprinting-client-rects-noise",
 +     "Enable get*ClientRects() fingerprint deception",
 +     "Scale the output values of Range::getClientRects() and Element::getBoundingClientRect() with a randomly selected factor in the range -0.0003% to 0.0003%, which are recomputed on every document initialization.",
@@ -91,7 +91,7 @@
  #include "ui/accessibility/accessibility_features.h"
  #include "ui/base/ui_base_features.h"
  #include "ui/events/blink/blink_features.h"
-@@ -449,6 +450,10 @@ void SetRuntimeFeaturesFromCommandLine(c
+@@ -450,6 +451,10 @@ void SetRuntimeFeaturesFromCommandLine(c
         switches::kEnableAccessibilityObjectModel, true},
        {wrf::EnableAllowSyncXHRInPageDismissal,
         switches::kAllowSyncXHRInPageDismissal, true},
@@ -156,7 +156,7 @@
  void Document::UpdateActiveStyle() {
 --- a/third_party/blink/renderer/core/dom/document.h
 +++ b/third_party/blink/renderer/core/dom/document.h
-@@ -534,6 +534,10 @@ class CORE_EXPORT Document : public Cont
+@@ -533,6 +533,10 @@ class CORE_EXPORT Document : public Cont
      has_xml_declaration_ = has_xml_declaration ? 1 : 0;
    }
  
@@ -167,7 +167,7 @@
    String visibilityState() const;
    bool IsPageVisible() const;
    bool hidden() const;
-@@ -2106,6 +2110,9 @@ class CORE_EXPORT Document : public Cont
+@@ -2101,6 +2105,9 @@ class CORE_EXPORT Document : public Cont
  
    base::ElapsedTimer start_time_;
  
@@ -295,8 +295,8 @@
      "//ui/base/cursor",
 --- a/third_party/blink/renderer/platform/exported/web_runtime_features.cc
 +++ b/third_party/blink/renderer/platform/exported/web_runtime_features.cc
-@@ -667,4 +667,12 @@ void WebRuntimeFeatures::EnableTrustToke
-   RuntimeEnabledFeatures::SetTrustTokensEnabled(enable);
+@@ -671,4 +671,12 @@ void WebRuntimeFeatures::EnableInstalled
+   RuntimeEnabledFeatures::SetInstalledAppEnabled(enable);
  }
  
 +void WebRuntimeFeatures::EnableFingerprintingClientRectsNoise(bool enable) {
