@@ -6,6 +6,11 @@ enable-rpm-build.patch
 change-user-agent.patch
 #skia-vsx-instructions.patch
 #Revert-Vulkan-Disable-global-merge-for-volk.patch
+scoped_nss_types-h-compile-fix.patch
+fix-breakpad-compile.patch
+fix-libvpx-compile.patch
+0001-Fix-libdav1d-compilation-on-clang-ppc.patch
+0001-Add-PPC64-support-for-libdav1d.patch
 
 chromium_power/breakpad/0001-Implement-ppc64-support-on-linux.patch
 chromium_power/crashpad/0001-Implement-support-for-PPC64-on-Linux.patch

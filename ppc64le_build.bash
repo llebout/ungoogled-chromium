@@ -1,12 +1,14 @@
 #!/bin/bash
 
 echo "#####################"
-echo "IT IS RECOMMENDED TO RUN THIS BUILD SCRIPT ON UBUNTU BIONIC!"
+echo "IT IS RECOMMENDED TO RUN THIS BUILD SCRIPT ON FEDORA 30!"
 echo "#####################"
 echo "If any error occurs, please refer to https://wiki.raptorcs.com/wiki/Porting/Chromium for missing dependencies or others."
 echo "#####################"
 
 set -eux
+
+cp -r /usr/lib/python3.7/site-packages/xcbgen /usr/lib/python2.7/site-packages
 
 #export CCACHE_MAXSIZE=25G
 
@@ -66,6 +68,11 @@ cd third_party/ffmpeg
 ./chromium/scripts/build_ffmpeg.py linux ppc64
 ./chromium/scripts/generate_gn.py
 ./chromium/scripts/copy_config.sh
+cd ../../
+
+cd third_party/dav1d
+./generate_configs.py
+./generate_source.py
 cd ../../
 
 unset CC

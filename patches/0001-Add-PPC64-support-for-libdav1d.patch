@@ -1,0 +1,125 @@
+From 61dcf0ff9603e8f5b0a859fb0837c51527ebae43 Mon Sep 17 00:00:00 2001
+From: Colin Samples <colin.samples+git@gmail.com>
+Date: Fri, 1 Nov 2019 11:50:52 -0400
+Subject: [PATCH] Add PPC64 support for libdav1d
+
+---
+ third_party/dav1d/BUILD.gn            | 21 ++++++++++++++++++++
+ third_party/dav1d/generate_configs.py | 28 ++-------------------------
+ third_party/dav1d/generate_source.py  |  2 ++
+ 3 files changed, 25 insertions(+), 26 deletions(-)
+
+diff --git a/third_party/dav1d/BUILD.gn b/third_party/dav1d/BUILD.gn
+index 37ced877cb27..06e76613f8c0 100644
+--- a/third_party/dav1d/BUILD.gn
++++ b/third_party/dav1d/BUILD.gn
+@@ -174,6 +174,8 @@ static_library("dav1d_8bit") {
+     sources += arm_template_sources
+   } else if (current_cpu == "arm64") {
+     sources += arm_template_sources
++  } else if (current_cpu == "ppc64") {
++    sources += ppc64_template_sources
+   }
+
+   cflags = dav1d_copts
+@@ -194,6 +196,8 @@ static_library("dav1d_10bit") {
+     sources += arm_template_sources
+   } else if (current_cpu == "arm64") {
+     sources += arm_template_sources
++  } else if (current_cpu == "ppc64") {
++    sources += ppc64_template_sources
+   }
+
+   cflags = dav1d_copts
+@@ -233,6 +237,21 @@ if (current_cpu == "x86" || current_cpu == "x64") {
+       ":dav1d_config",
+     ]
+
++    cflags = dav1d_copts
++  }
++} else if (current_cpu == "ppc64") {
++  static_library("dav1d_ppc64") {
++    sources = [
++      "libdav1d/src/ppc/cpu.c",
++      "libdav1d/src/ppc/cpu.h",
++    ]
++
++    configs -= [ "//build/config/compiler:chromium_code" ]
++    configs += [
++      "//build/config/compiler:no_chromium_code",
++      ":dav1d_config",
++    ]
++
+     cflags = dav1d_copts
+   }
+ }
+@@ -262,5 +281,7 @@ static_library("dav1d") {
+     }
+   } else if (current_cpu == "arm" || current_cpu == "arm64") {
+     deps += [ ":dav1d_arm" ]
++  } else if (current_cpu == "ppc64") {
++    deps += [ ":dav1d_ppc64" ]
+   }
+ }
+diff --git a/third_party/dav1d/generate_configs.py b/third_party/dav1d/generate_configs.py
+index 28e5f982d6f7..0ed1367b99fe 100755
+--- a/third_party/dav1d/generate_configs.py
++++ b/third_party/dav1d/generate_configs.py
+@@ -20,7 +20,7 @@ CHROMIUM_ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', '..'))
+ sys.path.append(os.path.join(CHROMIUM_ROOT_DIR, 'build'))
+ import gn_helpers
+
+-MESON = ['meson.py']
++MESON = ['meson']
+
+ DEFAULT_BUILD_ARGS = [
+     '-Dbuild_tools=false', '-Dbuild_tests=false', '--buildtype', 'release'
+@@ -157,31 +157,7 @@ def main():
+   linux_env = os.environ
+   linux_env['CC'] = 'clang'
+
+-  GenerateConfig('config/linux/x64', linux_env)
+-  GenerateConfig('config/linux-noasm/x64', linux_env, ['-Denable_asm=false'])
+-
+-  GenerateConfig('config/linux/x86', linux_env,
+-                 ['--cross-file', '../crossfiles/linux32.crossfile'])
+-  GenerateConfig('config/linux/arm', linux_env,
+-                 ['--cross-file', '../crossfiles/arm.crossfile'])
+-  GenerateConfig('config/linux/arm64', linux_env,
+-                 ['--cross-file', '../crossfiles/arm64.crossfile'])
+-
+-  win_x86_env = SetupWindowsCrossCompileToolchain('x86')
+-  GenerateConfig('config/win/x86', win_x86_env,
+-                 ['--cross-file', '../crossfiles/win32.crossfile'] +
+-                 WINDOWS_BUILD_ARGS)
+-
+-  win_x64_dir = 'config/win/x64'
+-  win_x64_env = SetupWindowsCrossCompileToolchain('x64')
+-  GenerateConfig(win_x64_dir, win_x64_env,
+-                 ['--cross-file', '../crossfiles/win64.crossfile'] +
+-                 WINDOWS_BUILD_ARGS)
+-
+-  # Sadly meson doesn't support arm64 + clang-cl, so we need to create the
+-  # Windows arm64 config from the Windows x64 config.
+-  GenerateWindowsArm64Config(win_x64_dir)
+-
++  GenerateConfig('config/linux/ppc64', linux_env)
+
+ if __name__ == '__main__':
+   main()
+diff --git a/third_party/dav1d/generate_source.py b/third_party/dav1d/generate_source.py
+index 0ca1c5595be0..8a5c69158e5c 100755
+--- a/third_party/dav1d/generate_source.py
++++ b/third_party/dav1d/generate_source.py
+@@ -54,6 +54,8 @@ def WriteGn(fd):
+   WriteArray(fd, "arm64_asm_sources", glob.glob("libdav1d/src/arm/64/*.S"))
+   WriteArray(fd, "arm_template_sources", glob.glob("libdav1d/src/arm/*_tmpl.c"))
+
++  WriteArray(fd, "ppc64_template_sources", glob.glob("libdav1d/src/ppc/*_tmpl.c"))
++
+   template_sources = glob.glob("libdav1d/src/*_tmpl.c")
+   WriteArray(fd, "template_sources", template_sources)
+
+--
+2.23.0
+
