@@ -7,6 +7,7 @@ This is an exhaustive list of command-line switches and `chrome://flags` introdu
 If a flag requires a value, you must specify it with an `=` sign; e.g. flag `--foo` with value `bar` should be written as `--foo=bar`.
 
 * `--bookmark-bar-ntp` - Sets the visibility of the bookmark bar on the New Tab Page. Only takes the value `never`.
+* `--close-window-with-last-tab` - Determines whether a window should close once the last tab is closed.  Only takes the value `never`.  Also configurable under `chrome://flags`
 * `--disable-beforeunload` (Not in `chrome://flags`) - Disables JavaScript dialog boxes triggered by `beforeunload`
 * `--disable-encryption` (Windows only, not in `chrome://flags`) - Disable encryption of cookies, passwords, and settings which uses a generated machine-specific encryption key. This is used to enable portable user data directories.
 * `--disable-machine-id` (Windows only, not in `chrome://flags`) - Disables use of a generated machine-specific ID to lock the user data directory to that machine. This is used to enable portable user data directories.
@@ -21,5 +22,10 @@ If a flag requires a value, you must specify it with an `=` sign; e.g. flag `--f
 * `--omnibox-autocomplete-filtering` - Restrict omnibox autocomplete results to search suggestions (if enabled) or search suggestions and bookmarks. The type of filtering is determined by the values `search-suggestions-only` and `search-suggestions-and-bookmarks`, respectively.
 * `--pdf-plugin-name` - Sets the internal PDF viewer plugin name. Useful for sites that probe JavaScript API `navigator.plugins`. Supports values `chrome` for Chrome, `edge` for Microsoft Edge. Default value when omitted is Chromium.
 * `--scroll-tabs` - Determines if scrolling will cause a switch to a neighboring tab if the cursor hovers over the tabs, or the empty space beside the tabs. The flag requires one the values: `always`, `never`, `incognito-and-guest`. When omitted, the default is to use platform-specific behavior, which is currently enabled only on desktop Linux.
-* `--set-ipv6-probe-false` - (Not in `chrome://flags`) Forces the result of the browser's IPv6 probing (i.e. IPv6 connectivity test) to be unsuccessful. This causes IPv4 addresses to be prioritized over IPv6 addresses. Without this flag, the probing result is set to be successful, which causes IPv6 to be used over IPv4 when possible.
 * `--show-avatar-button` - Sets visibility of the avatar button. The flag requires one of the values: `always`, `incognito-and-guest` (only show Incognito or Guest modes), or `never`.
+
+## Feature flags
+
+Feature flags are enabled with the `--enable-features` switch.  Multiple features can be passed at the same time by separating them with a comma, e.g. `--enable-features=flag1,flag2,flag3`.
+
+* `SetIpv6ProbeFalse` - (Not in `chrome://flags`) Forces the result of the browser's IPv6 probing (i.e. IPv6 connectivity test) to be unsuccessful. This causes IPv4 addresses to be prioritized over IPv6 addresses. Without this flag, the probing result is set to be successful, which causes IPv6 to be used over IPv4 when possible.
