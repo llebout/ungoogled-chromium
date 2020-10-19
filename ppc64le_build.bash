@@ -81,7 +81,7 @@ unset CXX
 
 cd ../
 
-REVISION=$(grep -Po "(?<=CLANG_REVISION = ')\w+(?=')" src/tools/clang/scripts/update.py)
+REVISION=$(grep -Po "(?<=CLANG_REVISION = ').+(?=')" src/tools/clang/scripts/update.py)
 
 if [ -d "llvm-project" ]; then
     cd llvm-project
