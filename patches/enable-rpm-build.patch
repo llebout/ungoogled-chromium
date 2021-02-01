@@ -729,11 +729,11 @@
  }
 
  verify_package() {
---- chromium-83.0.4103.56.orig/chrome/installer/linux/rpm/chrome.spec.template
-+++ chromium-83.0.4103.56/chrome/installer/linux/rpm/chrome.spec.template
-@@ -58,11 +58,9 @@ if [ -z "@@INSTALLDIR@@" -o ! -d "@@STAG
+--- a/chrome/installer/linux/rpm/chrome.spec.template
++++ b/chrome/installer/linux/rpm/chrome.spec.template
+@@ -58,11 +58,9 @@ if [ -z "@@INSTALLDIR@@" -o ! -d "@@STAGEDIR@@/@@INSTALLDIR@@" ] ; then
  fi
-
+ 
  install -m 755 -d \
 -  "$RPM_BUILD_ROOT/etc" \
    "$RPM_BUILD_ROOT/opt" \
@@ -742,9 +742,9 @@
 -cp -a "@@STAGEDIR@@/etc/" "$RPM_BUILD_ROOT/"
  cp -a "@@STAGEDIR@@/opt/" "$RPM_BUILD_ROOT/"
  cp -a "@@STAGEDIR@@/usr/" "$RPM_BUILD_ROOT/"
-
+ 
 @@ -85,7 +83,6 @@ rm -rf "$RPM_BUILD_ROOT"
-
+ 
  # Be explicit about the files we scatter throughout the system we don't
  # accidentally "own" stuff that's not ours (crbug.com/123990).
 -/etc/cron.daily/@@PACKAGE@@
@@ -752,9 +752,9 @@
  /usr/bin/@@USR_BIN_SYMLINK_NAME@@
  /usr/share/appdata/@@PACKAGE@@.appdata.xml
 @@ -122,44 +119,6 @@ add_nss_symlinks
-
+ 
  remove_udev_symlinks
-
+ 
 -DEFAULTS_FILE="/etc/default/@@PACKAGE@@"
 -if [ ! -e "$DEFAULTS_FILE" ]; then
 -  echo 'repo_add_once="true"' > "$DEFAULTS_FILE"
