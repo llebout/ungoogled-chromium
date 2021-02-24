@@ -113,4 +113,4 @@ cp ../../flags.gn out/Default/args.gn
 sed "s#../llvm_build#${LLVM_BUILD_DIR}#g" -i out/Default/args.gn
 
 ./out/Default/gn gen out/Default --fail-on-unused-args
-ninja -C out/Default chrome chrome_sandbox chromedriver stable_rpm
+ninja -C out/Default chrome chrome_sandbox chromedriver #stable_rpm

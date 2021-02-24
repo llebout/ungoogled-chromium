@@ -1,8 +1,8 @@
 gl-bug-workaround.patch
 llvm-bug-workaround.patch
 #enable-vaapi.patch // broken according to chromium repo in this group
-enable-rpm-build-ungoogled-chromium.patch
-enable-rpm-build.patch
+#enable-rpm-build-ungoogled-chromium.patch
+#enable-rpm-build.patch
 change-user-agent.patch
 #skia-vsx-instructions.patch
 #Revert-Vulkan-Disable-global-merge-for-volk.patch
