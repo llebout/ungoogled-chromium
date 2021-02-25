@@ -1,5 +1,5 @@
-gl-bug-workaround.patch
-llvm-bug-workaround.patch
+#gl-bug-workaround.patch
+#llvm-bug-workaround.patch
 #enable-vaapi.patch // broken according to chromium repo in this group
 #enable-rpm-build-ungoogled-chromium.patch
 #enable-rpm-build.patch
