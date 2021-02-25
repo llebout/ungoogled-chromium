@@ -8,7 +8,7 @@ change-user-agent.patch
 #Revert-Vulkan-Disable-global-merge-for-volk.patch
 #scoped_nss_types-h-compile-fix.patch
 #fix-breakpad-compile.patch
-xxx-ppc64le-support.patch
+#xxx-ppc64le-support.patch
 fix-libvpx-compile.patch
 0001-Fix-libdav1d-compilation-on-clang-ppc.patch
 0001-Add-PPC64-support-for-libdav1d.patch
