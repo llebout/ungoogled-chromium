@@ -46,7 +46,7 @@ mkdir -p build/download_cache
 
 ./utils/patches.py apply build/src patches
 
-patch -p0 --ignore-whitespace -i patches/xxx-ppc64le-support.patch -d build/src --no-backup-if-mismatch --forward
+patch -p0 --ignore-whitespace -i "$(pwd)/patches/xxx-ppc64le-support.patch" -d build/src --no-backup-if-mismatch --forward
 
 ./utils/domain_substitution.py apply -r domain_regex.list -f domain_substitution.list -c build/domsubcache.tar.gz build/src
 
