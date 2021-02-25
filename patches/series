@@ -18,7 +18,7 @@ fix-swiftshader-link.patch
 #chromium_power/crashpad/0001-Implement-support-for-PPC64-on-Linux.patch
 #chromium_power/crashpad/0002-Include-cstddef-to-fix-build.patch
 #chromium_power/database/0001-Properly-detect-little-endian-PPC64-systems.patch
-#chromium_power/ffmpeg/0001-Add-support-for-ppc64.patch
+chromium_power/ffmpeg/0001-Add-support-for-ppc64.patch
 #chromium_power/libaom/0001-Add-ppc64-target-to-libaom.patch
 #chromium_power/libaom/0001-Add-pregenerated-config-for-libaom-on-ppc64.patch
 #chromium_power/sandbox/0001-linux-seccomp-bpf-ppc64-glibc-workaround-in-SIGSYS-h.patch
