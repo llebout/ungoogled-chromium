@@ -10,8 +10,8 @@ change-user-agent.patch
 #fix-breakpad-compile.patch
 #xxx-ppc64le-support.patch
 fix-libvpx-compile.patch
-0001-Fix-libdav1d-compilation-on-clang-ppc.patch
-0001-Add-PPC64-support-for-libdav1d.patch
+#0001-Fix-libdav1d-compilation-on-clang-ppc.patch
+#0001-Add-PPC64-support-for-libdav1d.patch
 fix-swiftshader-link.patch
 
 #chromium_power/breakpad/0001-Implement-ppc64-support-on-linux.patch
