@@ -72,10 +72,10 @@ cd third_party/ffmpeg
 ./chromium/scripts/copy_config.sh
 cd ../../
 
-cd third_party/dav1d
-./generate_configs.py
-./generate_source.py
-cd ../../
+#cd third_party/dav1d
+#./generate_configs.py
+#./generate_source.py
+#cd ../../
 
 unset CC
 unset CXX
