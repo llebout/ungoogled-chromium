@@ -36,7 +36,7 @@ chromium_power/ffmpeg/0001-Add-support-for-ppc64.patch
 #chromium_power/sandbox/Sandbox-linux-services-credentials.cc-PPC.patch
 chromium_power/third_party/0001-DONTMERGE-third_party-node-Use-system-nodejs-binary.patch
 #chromium_power/third_party/0001-Force-baseline-POWER8-AltiVec-VSX-CPU-features-when-.patch
-#chromium_power/third_party/0001-Reenable-VSX-in-libpng.patch
+chromium_power/third_party/0001-Reenable-VSX-in-libpng.patch
 #chromium_power/third_party/0001-third_party-angle-Include-missing-header-cstddef-in-.patch
 #chromium_power/third_party/0001-third_party-boringssl-Properly-detect-ppc64le-in-BUI.patch
 #chromium_power/third_party/0001-third_party-libvpx-Properly-generate-gni-on-ppc64.patch
